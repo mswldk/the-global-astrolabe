@@ -1,0 +1,64 @@
+import { capitals } from "@repo/data/rest-countries/capitals";
+import { cca2Codes } from "@repo/data/cca2.codes";
+import { cca3Codes } from "@repo/data/rest-countries/cca3.codes";
+import { ccn3Codes } from "@repo/data/rest-countries/ccn3";
+import { ciocCodes } from "@repo/data/rest-countries/cioc";
+import { currencies } from "@repo/data/rest-countries/currencies";
+import { languages, supportedLanguages } from "@repo/data/rest-countries/langs";
+import { regions } from "@repo/data/rest-countries/regions";
+import { subregions } from "@repo/data/rest-countries/subregions";
+import { LiteralUnion } from "./common";
+
+export type CountryPicker<T extends readonly (keyof Country)[]> = Pick<Country, T[number]>;
+
+export type SupportedLanguages = (typeof supportedLanguages)[number];
+export type Cca3Code = LiteralUnion<(typeof cca3Codes)[number]>;
+export type Cca2Code = LiteralUnion<(typeof cca2Codes)[number]>;
+export type Capital = LiteralUnion<(typeof capitals)[number]>;
+export type CiocCode = LiteralUnion<(typeof ciocCodes)[number]>;
+export type Ccn3Code = LiteralUnion<(typeof ccn3Codes)[number]>;
+export type Region = (typeof regions)[number];
+export type Subregion = LiteralUnion<(typeof subregions)[number]>;
+export type Lang = LiteralUnion<(typeof languages)[number]>;
+export type Currency = LiteralUnion<(typeof currencies)[number]>;
+
+type TranslationValue = { official: string; common: string };
+type Translations = Partial<Record<SupportedLanguages, TranslationValue>> & Record<string, TranslationValue>;
+
+export type Country = {
+    name: { common: string; official: string; nativeName?: Record<string, { official: string; common: string }> };
+    tld?: string[];
+    cca2: string;
+    ccn3?: string;
+    cca3: string;
+    cioc?: string;
+    independent: boolean;
+    status: string;
+    unMember: boolean;
+    currencies?: Record<string, { name: string; symbol: string }>;
+    idd: { root: string; suffixes: string[] } | Record<string, never>;
+    capital?: string[];
+    altSpellings: string[];
+    region: string;
+    subregion?: string;
+    languages?: Record<string, string>;
+    translations: Translations;
+    latlng: [number, number];
+    landlocked: boolean;
+    borders?: string[];
+    area: number;
+    demonyms: Record<string, { f: string; m: string }>;
+    flag: string;
+    maps: { googleMaps: string; openStreetMaps: string };
+    population: number;
+    gini?: { [year: string]: number };
+    fifa?: string;
+    car: { signs?: string[]; side: string };
+    timezones: string[];
+    continents: string[];
+    flags: { png: string; svg: string; alt?: string };
+    coatOfArms: { png: string; svg: string; alt?: string } | Record<string, never>;
+    startOfWeek: string;
+    capitalInfo: { latlng: [number, number] | [] } | Record<string, never>;
+    postalCode: { format: string | null; regex: string | null };
+};

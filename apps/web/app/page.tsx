@@ -1,6 +1,7 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
+import { type GeoLocation } from "@repo/types/geo-location";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -19,6 +20,12 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
+
+  const geoLocation: GeoLocation = {
+    latitude: 0,
+    longitude: 0,
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
