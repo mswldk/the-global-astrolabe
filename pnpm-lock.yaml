@@ -67,6 +67,9 @@ importers:
         specifier: ^4.1.13
         version: 4.1.13
     devDependencies:
+      '@repo/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config

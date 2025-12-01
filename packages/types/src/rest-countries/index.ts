@@ -1,5 +1,5 @@
 import { capitals } from "@repo/data/rest-countries/capitals";
-import { cca2Codes } from "@repo/data/cca2.codes";
+import { cca2Codes } from "@repo/data/rest-countries/cca2.codes";
 import { cca3Codes } from "@repo/data/rest-countries/cca3.codes";
 import { ccn3Codes } from "@repo/data/rest-countries/ccn3";
 import { ciocCodes } from "@repo/data/rest-countries/cioc";

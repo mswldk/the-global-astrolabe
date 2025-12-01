@@ -3,6 +3,10 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import * as z from "zod/v4";
 import express from "express";
 
+import { type Country } from "@repo/types/rest-countries/index";
+import { ALL_CODES } from "@repo/types/rest-countries/common";
+import { cca2Codes } from "@repo/data/rest-countries/cca2.codes";
+
 const REST_COUNTRIES_BASE_URL: string = "https://restcountries.com/v3.1";
 
 const server = new McpServer({
@@ -11,32 +15,39 @@ const server = new McpServer({
 });
 
 server.registerTool(
-    'get-country-details', 
+    'get-country-details',
     {
         title: 'Get Country Details',
         description: 'Retrieves geographical and currency information for a given country.',
         inputSchema: { countryCode: z.string().length(2).describe("The ISO 3166-1 alpha-2 code of the country to get details for.") },
+        outputSchema: { result: z.object<Country>().nullable() }
     },
     async ({ countryCode }) => {
-        const request = await fetch(`${REST_COUNTRIES_BASE_URL}/alpha/${countryCode.toLowerCase()}`);
-        const result = await request.json();
+        if ((cca2Codes as unknown as Array<string>).includes(countryCode.toLowerCase())) {
+            const request: Response = await fetch(`${REST_COUNTRIES_BASE_URL}/alpha/${countryCode.toLowerCase()}`);
+            const result: Array<Country> = request.ok ? await request.json() : null;
 
-        console.log(result);
-
-        if (countryCode === "DK") {
-            return {
-                content: [{
-                    type: 'text',
-                    text: "The DK's capital is Copenhagen, and its currency is the Danish Krone."
-                }]
+            if (result) {
+                const country = result[0];
+                if (country) {
+                    const output = { result: country };
+                    return {
+                        content: [{
+                            type: 'text',
+                            text: `${country.name.common}'s capital is ${country.capital}.`
+                        }],
+                        structuredContent: output
+                    }
+                }
             }
         }
-    
+
         return {
             content: [{
                 type: "text",
                 text: `No detailed data available for ${countryCode} yet, but the tool executed successfully.`
-            }]
+            }],
+            structuredContent: { result: undefined }
         };
     }
 );
@@ -47,7 +58,7 @@ app.use(express.json());
 
 app.use("/mcp", async (req, res) => {
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
-    
+
     res.on('close', () => {
         transport.close();
     });
