@@ -4,7 +4,6 @@ import * as z from "zod/v4";
 import express from "express";
 
 import { type Country } from "@repo/types/rest-countries/index";
-import { ALL_CODES } from "@repo/types/rest-countries/common";
 import { cca2Codes } from "@repo/data/rest-countries/cca2.codes";
 
 const REST_COUNTRIES_BASE_URL: string = "https://restcountries.com/v3.1";
