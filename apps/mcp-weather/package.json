@@ -1,0 +1,28 @@
+{
+    "name": "mcp-weather",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+        "build": "tsup src/index.ts --format cjs --dts",
+        "start": "node dist/index.js",
+        "check-types": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@repo/data": "workspace:*",
+        "@repo/eslint-config": "workspace:*",
+        "@repo/types": "workspace:*",
+        "@repo/typescript-config": "workspace:*",
+        "@types/express": "^5.0.5",
+        "@types/node": "^22.15.3",
+        "ts-node": "^10.9.2",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.23.0",
+        "express": "^5.2.0",
+        "openmeteo": "^1.2.3",
+        "zod": "^4.1.13"
+    }
+}
